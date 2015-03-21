@@ -295,21 +295,22 @@ class Block(object):
    def getNumTxs(self):
        return self.transaction_cnt
 
-
-def parseBlockFile(blockfile):
+def parseBlockBytes(bytestream):
     blocks = []
     count = 0;
-    with open(blockfile, 'rb') as bf:
-        while True:
-          curBlock = Block()
-          curBlock.parseBlock(bf)
-          if (curBlock.blocksize == 0):
-              break
-          else:
-              blocks.append(curBlock)
-
+    while True:
+        curBlock = Block()
+        curBlock.parseBlock(bytestream)
+        if (curBlock.blocksize == 0):
+            break
+        else:
+            blocks.append(curBlock)
     return blocks
 
+def parseBlockFile(blockfile):
+    with open(blockfile, 'rb') as bf:
+        blocks = parseBlockBytes(bf)
+    return blocks
 
 def printBlockFile(blockfile):
     print 'Parsing block file: %s\n' % blockfile
@@ -319,8 +320,6 @@ def printBlockFile(blockfile):
         count = count + 1
         print("Block Count: " + str(count))
         blk.printBlock()
-
-
 
 
 if __name__ == "__main__":
